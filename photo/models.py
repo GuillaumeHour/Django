@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.urlresolvers import  reverse
 from django.contrib import admin
 from django.conf import settings
 from string import join
@@ -32,14 +33,14 @@ class Image(models.Model):
     width = models.IntegerField(blank=True, null=True)
     height = models.IntegerField(blank=True, null=True)
     user = models.ForeignKey(User, null=True, blank=True)
+    
+    
     def __unicode__(self):
         return self.image.name
     
     def size(self):
             return "%s x %s" % (self.width, self.height)
     
-    def identite(self):
-        return self.id
     
     def tags_(self):
         lst = [x[1] for x in self.tags.values_list()]
@@ -54,9 +55,8 @@ class Image(models.Model):
                                                                         (self.image.name, self.image.name))
         thumbnail.allow_tags = True
     
-    def get_absolute_url(self):
-
-        return reverse('image-view', kwargs={'pk': self.id})
+    def get_absolute_url(self,*args,**kwargs):
+        return reverse('image-view',kwargs={'pk': self.pk})
 
 
 
